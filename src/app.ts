@@ -3,9 +3,10 @@ import { clientDb } from './factories/database-connection'
 import { route } from './routes'
 const app = Express()
 
-clientDb().then(connection => {
+clientDb(connection => {
 	app.locals.database = connection
 })
+
 app.use(Express.json())
 app.use(route)
 
