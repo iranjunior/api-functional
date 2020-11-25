@@ -40,4 +40,17 @@ route.patch('/v1/update-account/:id', async (req, res, next) => {
     
 })
 
+route.delete('/v1/delete-account/:id', async (req, res, next) => {
+	const { params, app } = req
+	try {
+		const { remove } = await account(app.locals.database)
+		await remove(params.id)
+		res.status(200).json({ ok: true, message: 'Usuario deletado com sucesso' })
+	} catch (error) {
+		res.status(500).json({ ok: false, message: 'Algo deu errado' })
+	}
+	return next()
+    
+})
+
 export { route }
