@@ -6,10 +6,12 @@ export type AccountModel = {
     occupation: string;
     company: string;
 }
-interface IAccountOperations {
+export interface IAccountOperations {
         create: (data: AccountModel) => Promise<void>;
         loadById: (id: string) => Promise<AccountModel | null>;
 }
 
-export type Account = (connectionDatabase: MongoClient) => IAccountOperations
+export interface Account {
+    (connectionDatabase: MongoClient): IAccountOperations
+} 
 
