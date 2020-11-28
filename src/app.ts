@@ -1,13 +1,15 @@
-import Express from 'express'
+import Express, { Router } from 'express'
 import { clientDb } from './factories/database-connection'
-import { route } from './routes'
+import { router } from './routes'
 const app = Express()
 
 clientDb(connection => {
 	app.locals.database = connection
-})
+	app.use(Express.json())
+	app.use(router(app)(Router()))
+}, (error) => { 
+	throw new Error(error.stack)}
+)
 
-app.use(Express.json())
-app.use(route)
 
 export {app}
