@@ -1,4 +1,5 @@
 import { Express, Router } from 'express'
+import { Forbbiden } from '../erros'
 import { account } from '../rules/account'
 
 type CreateRouter = (app: Express) => (route: Router) => Router
@@ -16,8 +17,12 @@ export const router: CreateRouter = (app: Express) => {
 				logger.info('Returns with success for create account')
 				res.status(201).json({ ok: true, message: 'Usuario cadastrado com sucesso' })
 			} catch (error) {
-				logger.info('Returns with error for create account', { error: error.response || error })
-				res.status(500).json({ ok: false, message: 'Algo deu errado' })
+				if(error instanceof Forbbiden) {
+					logger.info('Account already created')
+					res.status(403).json({ ok: false, message: 'Usuario já criado' })
+				}else {
+					res.status(500).json({ ok: false, message: 'Algo deu errado' })
+				}
 			}
 			return next()
 			
